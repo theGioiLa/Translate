@@ -1,0 +1,25 @@
+﻿Build started 7/2/2018 5:07:13 PM.
+     1>Project "C:\Users\han.glschool\Desktop\quy.nguyenquang\3D\TrainingFramework\TrainingFramework.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\han.glschool\Desktop\quy.nguyenquang\3D\\Include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\TrainingFramework.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt TrainingFramework.cpp
+         TrainingFramework.cpp
+     1>c:\users\han.glschool\desktop\quy.nguyenquang\3d\trainingframework\trainingframework.cpp(19): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\users\han.glschool\desktop\quy.nguyenquang\3d\trainingframework\trainingframework.cpp(30): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>c:\users\han.glschool\desktop\quy.nguyenquang\3d\trainingframework\trainingframework.cpp(72): warning C4305: '+=' : truncation from 'double' to 'float'
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\han.glschool\Desktop\quy.nguyenquang\3D\\BIN\TrainingFramework.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\han.glschool\Desktop\quy.nguyenquang\3D\\Lib libEGL.lib libGLESv2.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\han.glschool\Desktop\quy.nguyenquang\3D\\BIN\TrainingFramework.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\han.glschool\Desktop\quy.nguyenquang\3D\\BIN\TrainingFramework.lib" /MACHINE:X86 /SAFESEH Debug\EnvShaders.obj
+         Debug\Map.obj
+         Debug\Model.obj
+         Debug\Object.obj
+         Debug\ObjShaders.obj
+         Debug\Texture.obj
+         Debug\TrainingFramework.obj
+         Debug\Shaders.obj
+         Debug\stdafx.obj
+         C:\Users\han.glschool\Desktop\quy.nguyenquang\3D\Debug\Utilities.lib
+         TrainingFramework.vcxproj -> C:\Users\han.glschool\Desktop\quy.nguyenquang\3D\\BIN\TrainingFramework.exe
+     1>Done Building Project "C:\Users\han.glschool\Desktop\quy.nguyenquang\3D\TrainingFramework\TrainingFramework.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.77

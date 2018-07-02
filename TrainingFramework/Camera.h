@@ -5,4 +5,7 @@ class Camera {
 protected:
 	Matrix viewMatrix = Matrix().SetIdentity();
 
+public:
+
+
 };

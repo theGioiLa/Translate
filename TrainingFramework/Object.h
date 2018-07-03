@@ -8,7 +8,7 @@ class Object {
 protected:
 	Model m_Model;
 	Texture m_Skin;
-
+	
 	Vector3 m_vScale;
 	Vector3 m_vRotationAngle;
 	Vector3 m_vTranslation;
@@ -16,7 +16,8 @@ protected:
 	Matrix m_transformMtx;
 
 public:
-	Object(): m_vScale(Vector3(1, 1, 1)), m_vRotationAngle(Vector3(0, 0, 0)), m_vTranslation(Vector3(0, 0, 0)) {
+	Object(): m_vScale(Vector3(1, 1, 1)), m_vRotationAngle(Vector3(0, 0, 0)),
+		m_vTranslation(Vector3(0, 0, 0)) {
 		m_Model = Model();
 		m_Skin = Texture(); 
 	}

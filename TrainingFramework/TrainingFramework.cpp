@@ -15,11 +15,14 @@
 
 ObjShaders objShaders;
 EnvShaders envShaders;
+
 bool isKeyPressed = false;
 unsigned char keyPressed;
+
 Camera cam;
 Matrix viewMatrix = Matrix().SetIdentity();
 Matrix projectionMatrix = Matrix().SetPerspective(0.75f, static_cast<float>(Globals::screenWidth) / Globals::screenHeight, 0.1f, 100);
+
 float mov = 0.1;
 const int numberObjs = 2;
 Object* object = new Object[numberObjs];
@@ -65,16 +68,20 @@ void Draw ( ESContext *esContext ) {
 void Update ( ESContext *esContext, float deltaTime )
 {
 	if (isKeyPressed && deltaTime > 0) {
-		if (keyPressed == 'A') cam.MoveLeft(1.0 * deltaTime);
-		if (keyPressed == 'D') cam.MoveRight(1.0 * deltaTime);
-		if (keyPressed == 'Z') cam.MoveForward(1.0 * deltaTime);
-		if (keyPressed == 'X') cam.MoveBackward(1.0 * deltaTime);
-		if (keyPressed == 'S') cam.MoveDown(1.0 * deltaTime);
-		if (keyPressed == 'W') cam.MoveUp(1.0 * deltaTime);
-		if (keyPressed == 'R') cam.RotateLeft(1.0 * deltaTime);
-		if (keyPressed == 'T') cam.RotateRight(1.0 * deltaTime);
+		if (keyPressed == 'A') cam.MoveAlongLocalX(-deltaTime);
+		if (keyPressed == 'D') cam.MoveAlongLocalX(deltaTime);
+		if (keyPressed == 'W') cam.MoveAlongLocalY(deltaTime);
+		if (keyPressed == 'S') cam.MoveAlongLocalY(-deltaTime);
+		if (keyPressed == 'Z') cam.MoveAlongLocalZ(deltaTime);
+		if (keyPressed == 'X') cam.MoveAlongLocalZ(-deltaTime);
+		if (keyPressed == 'R') cam.RotateAroundWorldY(deltaTime);
+		if (keyPressed == 'T') cam.RotateAroundWorldY(-deltaTime);
+		if (keyPressed == 'G') cam.RotateAroundLocalX(deltaTime);
+		if (keyPressed == 'H') cam.RotateAroundLocalX(-deltaTime);
+		if (keyPressed == 'K') cam.RotateAroundLocalZ(deltaTime);
+		if (keyPressed == 'J') cam.RotateAroundLocalZ(-deltaTime);
 
-		viewMatrix = cam.CalculateViewMatrix();
+		viewMatrix = cam.GetViewMatrix();
 		for (int i = 0; i < numberObjs; i++) {
 			object[i].CalculateTransformMatrix();
 		}

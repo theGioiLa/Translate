@@ -2,23 +2,24 @@
 #include "Camera.h"
 
 void Camera::CalculateRotation() {
-	Vector3 zaxis = (m_Position - m_Target).Normalize();
-	Vector3 xaxis = (m_vUp.Cross(zaxis)).Normalize();
-	Vector3 yaxis = (zaxis.Cross(xaxis)).Normalize();
+	Vector3 axisZ = (m_Position - m_Target).Normalize();
+	Vector3 axisX = (m_vUp.Cross(axisZ)).Normalize();
+	Vector3	axisY = (axisZ.Cross(axisX)).Normalize();
+	printf_s("%f %f %f\n", axisX.x, axisX.y, axisX.z);
 	
-	m_RotationMatrix.m[0][0] = xaxis.x;
-	m_RotationMatrix.m[0][1] = xaxis.y;
-	m_RotationMatrix.m[0][2] = xaxis.z;
+	m_RotationMatrix.m[0][0] = axisX.x;
+	m_RotationMatrix.m[0][1] = axisX.y;
+	m_RotationMatrix.m[0][2] = axisX.z;
 	m_RotationMatrix.m[0][3] = 0;
 
-	m_RotationMatrix.m[1][0] = yaxis.x;
-	m_RotationMatrix.m[1][1] = yaxis.y;
-	m_RotationMatrix.m[1][2] = yaxis.z;
+	m_RotationMatrix.m[1][0] = axisY.x;
+	m_RotationMatrix.m[1][1] = axisY.y;
+	m_RotationMatrix.m[1][2] = axisY.z;
 	m_RotationMatrix.m[1][3] = 0;
 
-	m_RotationMatrix.m[2][0] = zaxis.x;
-	m_RotationMatrix.m[2][1] = zaxis.y;
-	m_RotationMatrix.m[2][2] = zaxis.z;
+	m_RotationMatrix.m[2][0] = axisZ.x;
+	m_RotationMatrix.m[2][1] = axisZ.y;
+	m_RotationMatrix.m[2][2] = axisZ.z;
 	m_RotationMatrix.m[2][3] = 0;
 
 	m_RotationMatrix.m[3][0] = 0;
@@ -33,14 +34,10 @@ void Camera::CalculateTranslation() {
 }
 
 Matrix Camera::CalculateWorldMatrix() {
-	if (isChanged) {
-		if (!isRotation) {
-			CalculateTranslation();
-			isRotation = true;
-		}
-
+	if (isMoved) {
+		if (!isRotation) CalculateTranslation();
 		CalculateRotation();
-		isChanged = false;
+		isMoved = false;
 	}
 
 	m_WorldMatrix = m_RotationMatrix * m_TranslationMatrix;
@@ -48,14 +45,9 @@ Matrix Camera::CalculateWorldMatrix() {
 }
 
 Matrix Camera::CalculateViewMatrix() {
-	if (isChanged) {
-		if (!isRotation) {
-			CalculateTranslation();
-			isRotation = true;
-		}
-
+	if (isMoved) {
+		if (!isRotation) CalculateTranslation();
 		CalculateRotation();
-		isChanged = false;
 	}
 
 	Matrix T_flip = m_TranslationMatrix;
@@ -69,70 +61,93 @@ Matrix Camera::CalculateViewMatrix() {
 	return m_ViewMatrix;
 }
 
-void Camera::MoveForward(GLfloat distance) {
-	isChanged = true;
-	Vector3 deltaMove = -(m_Position - m_Target).Normalize() * distance;
-	m_Position += deltaMove;
-	m_Target += deltaMove;
-}
-
-void Camera::MoveBackward(GLfloat distance) {
-	isChanged = true;
-	Vector3 deltaMove = (m_Position - m_Target).Normalize() * distance;
-	m_Position += deltaMove;
-	m_Target += deltaMove;
-}
-
-void Camera::MoveLeft(GLfloat distance) {
-	isChanged = true;
-	Vector3 deltaMove = -Vector3(distance, 0, 0);
-	m_Position += deltaMove;
-	m_Target += deltaMove;
-}
-
-void Camera::MoveRight(GLfloat distance) {
-	isChanged = true;
-	Vector3 deltaMove = Vector3(distance, 0, 0);
-	m_Position += deltaMove;
-	m_Target += deltaMove;
-}
-
-void Camera::MoveUp(GLfloat distance) {
-	isChanged = true;
-	Vector3 deltaMove = Vector3(0, distance, 0);
-	m_Position += deltaMove;
-	m_Target += deltaMove;
-}
-
-void Camera::MoveDown(GLfloat distance) {
-	isChanged = true;
-	Vector3 deltaMove = -Vector3(0, distance, 0);
-	m_Position += deltaMove;
-	m_Target += deltaMove;
-}
-
-void Camera::RotateLeft(GLfloat phi) {
-	isChanged = true;
-	isRotation = true;
-	Vector4 newUp = Vector4(m_vUp, 0) * m_ViewMatrix;
-	m_vUp = Vector3(newUp.x, newUp.y, newUp.z);
+void Camera::UpdateMatrix() {
 	CalculateWorldMatrix();
+	CalculateViewMatrix();
+}
+void Camera::MoveAlongLocalZ(GLfloat deltaTime) {
+	isMoved = true;
+	Vector3 direction = (m_Position - m_Target).Normalize();
+	Vector3 deltaMove = direction * m_Velocity * deltaTime;
 
-	Vector4 localTarget = Vector4(0, 0, -(m_Position - m_Target).Length(), 1);
-	Vector4 newLocalTarget = localTarget * Matrix().SetRotationY(phi);
-	Vector4 newWorldTarget = newLocalTarget * m_WorldMatrix;
-	m_Target = Vector3(newWorldTarget.x, newWorldTarget.y, newWorldTarget.z);
+	m_Position += deltaMove;
+	m_Target += deltaMove;
+
+	UpdateMatrix();
 }
 
-void Camera::RotateRight(GLfloat phi) {
-	isChanged = true;
+void Camera::MoveAlongLocalX(GLfloat deltaTime) {
+	isMoved = true;
+	Vector3 direction = (m_vUp.Cross(m_Position - m_Target)).Normalize();
+	Vector3 deltaMove = direction * m_Velocity * deltaTime;
+
+	m_Position += deltaMove;
+	m_Target += deltaMove;
+
+	UpdateMatrix();
+}
+
+void Camera::MoveAlongLocalY(GLfloat deltaTime) {
+	isMoved = true;
+	Vector3 direction = ((m_Position - m_Target).Cross(m_vUp.Cross(m_Position - m_Target))).Normalize();
+	Vector3 deltaMove = direction * m_Velocity * deltaTime;
+
+	m_Position += deltaMove;
+	m_Target += deltaMove;
+	
+	UpdateMatrix();
+}
+
+//Avoid this camera rotates over pi/2 
+void Camera::RotateAroundLocalX(GLfloat deltaTime) {
+	isMoved = true;
 	isRotation = true;
-	Vector4 newUp = Vector4(m_vUp, 0) * m_ViewMatrix;
-	m_vUp = Vector3(newUp.x, newUp.y, newUp.z);
-	CalculateWorldMatrix();
 
+	Vector3 axisZ = m_Position - m_Target;
+	
 	Vector4 localTarget = Vector4(0, 0, -(m_Position - m_Target).Length(), 1);
-	Vector4 newLocalTarget = localTarget * Matrix().SetRotationY(-phi);
+	Vector4 newLocalTarget = localTarget * Matrix().SetRotationX(m_AngularVelocity * deltaTime);
 	Vector4 newWorldTarget = newLocalTarget * m_WorldMatrix;
-	m_Target = Vector3(newWorldTarget.x, newWorldTarget.y, newWorldTarget.z);
+
+	m_Target.x = newWorldTarget.x;
+	m_Target.y = newWorldTarget.y;
+	m_Target.z = newWorldTarget.z;
+
+	if (m_vUp.Cross(axisZ).Length() > 0.05) {
+		UpdateMatrix();
+	} 
+
+	isRotation = false;
 }
+
+void Camera::RotateAroundWorldY(GLfloat deltaTime) {
+	isMoved = true;
+	isRotation = true;
+	
+	Vector4 localTarget = Vector4(0, 0, -(m_Position - m_Target).Length(), 1);
+	Vector4 rotationalAxis = Vector4(m_vUp, 0) * m_ViewMatrix;
+	Vector4 newLocalTarget = localTarget * Matrix().SetRotationAngleAxis(m_AngularVelocity * deltaTime, rotationalAxis.x, rotationalAxis.y, rotationalAxis.z);
+	Vector4 newWorldTarget = newLocalTarget * m_WorldMatrix;
+
+	m_Target.x = newWorldTarget.x;
+	m_Target.y = newWorldTarget.y;
+	m_Target.z = newWorldTarget.z;
+
+	UpdateMatrix();
+	isRotation = false;
+}
+
+void Camera::RotateAroundLocalZ(GLfloat deltaTime) {
+	isMoved = true;
+	isRotation = true;
+
+	Vector4 localUp = Vector4(m_vUp, 0) * m_ViewMatrix;
+	Vector4 newLocalUp = localUp * Matrix().SetRotationZ(m_AngularVelocity * deltaTime);
+	Vector4 newWorldUp= newLocalUp* m_WorldMatrix;
+	m_vUp.x = newWorldUp.x; m_vUp.y = newWorldUp.y; m_vUp.z = newWorldUp.z;
+
+	UpdateMatrix();
+
+	isRotation = false;
+}
+

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "EnvShader.h"
+#include "EnvShaders.h"
 
 void EnvShaders::FindLocationUA() {
 	positionAttribute = glGetAttribLocation(program, "a_pos");

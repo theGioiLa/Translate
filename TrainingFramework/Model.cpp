@@ -13,7 +13,7 @@ Model::Model(unsigned int nVertices, unsigned int nIndices) {
 
 void Model::Init(char* filename) {
 	FILE* file;
-	if (fopen_s(&file, filename, "rb") != 0) return;
+	if (fopen_s(&file, filename, "r") != 0) return;
 
 	fscanf_s(file, "NrVertices: %d\n", &m_nVertices);
 

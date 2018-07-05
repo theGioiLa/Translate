@@ -5,7 +5,6 @@ void Camera::CalculateRotation() {
 	Vector3 axisZ = (m_Position - m_Target).Normalize();
 	Vector3 axisX = (m_vUp.Cross(axisZ)).Normalize();
 	Vector3	axisY = (axisZ.Cross(axisX)).Normalize();
-	printf_s("%f %f %f\n", axisX.x, axisX.y, axisX.z);
 	
 	m_RotationMatrix.m[0][0] = axisX.x;
 	m_RotationMatrix.m[0][1] = axisX.y;
@@ -102,20 +101,18 @@ void Camera::MoveAlongLocalY(GLfloat deltaTime) {
 void Camera::RotateAroundLocalX(GLfloat deltaTime) {
 	isMoved = true;
 	isRotation = true;
-
-	Vector3 axisZ = m_Position - m_Target;
 	
 	Vector4 localTarget = Vector4(0, 0, -(m_Position - m_Target).Length(), 1);
 	Vector4 newLocalTarget = localTarget * Matrix().SetRotationX(m_AngularVelocity * deltaTime);
 	Vector4 newWorldTarget = newLocalTarget * m_WorldMatrix;
+	m_Target.x = newWorldTarget.x; m_Target.y = newWorldTarget.y; m_Target.z = newWorldTarget.z;
 
-	m_Target.x = newWorldTarget.x;
-	m_Target.y = newWorldTarget.y;
-	m_Target.z = newWorldTarget.z;
+	Vector4 localUp = Vector4(m_vUp, 0) * m_ViewMatrix;
+	Vector4 newLocalUp = localUp * Matrix().SetRotationX(m_AngularVelocity * deltaTime);
+	Vector4 newWorldUp = newLocalUp * m_WorldMatrix;
+	m_vUp.x = newWorldUp.x; m_vUp.y = newWorldUp.y; m_vUp.z = newWorldUp.z;
 
-	if (m_vUp.Cross(axisZ).Length() > 0.05) {
-		UpdateMatrix();
-	} 
+	UpdateMatrix();
 
 	isRotation = false;
 }

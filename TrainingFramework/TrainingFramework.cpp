@@ -6,11 +6,12 @@
 #include "Vertex.h"
 #include "Camera.h"
 #include "ObjShaders.h"
-#include "EnvShader.h"
+#include "EnvShaders.h"
 #include "Globals.h"
 #include "Texture.h"
 #include "Model.h"
 #include "Map.h"
+#include "ResourceManager.h"
 #include <conio.h>
 
 ObjShaders objShaders;
@@ -124,6 +125,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	esRegisterDrawFunc ( &esContext, Draw );
 	esRegisterUpdateFunc ( &esContext, Update );
 	esRegisterKeyFunc (&esContext, Key);
+
+	ResourceManager::GetInstance()->Init("../Resources/RM.txt");
 
 	esMainLoop ( &esContext );
 

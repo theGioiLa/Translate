@@ -50,14 +50,14 @@ void Object::CleanUp() {
 }
 
 void Object::CalculateTransformMatrix() {
-	Matrix T = Matrix().SetTranslation(m_vTranslation);
+	Matrix T = Matrix().SetTranslation(m_Position);
 
-	Matrix Rz = Matrix().SetRotationZ(m_vRotationAngle.z);
-	Matrix Rx = Matrix().SetRotationX(m_vRotationAngle.x);
-	Matrix Ry = Matrix().SetRotationY(m_vRotationAngle.y);
+	Matrix Rz = Matrix().SetRotationZ(m_RotationalAngle.z);
+	Matrix Rx = Matrix().SetRotationX(m_RotationalAngle.x);
+	Matrix Ry = Matrix().SetRotationY(m_RotationalAngle.y);
 	Matrix R = Rz * Rx * Ry;
 
-	Matrix S = Matrix().SetScale(m_vScale);
+	Matrix S = Matrix().SetScale(m_Scale);
 
 	m_transformMtx = S * R * T * viewMatrix * projectionMatrix;
 }

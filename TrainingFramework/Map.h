@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Object.h"
-#include "EnvShader.h"
+#include "EnvShaders.h"
 
 class Map: public Object {
 	public:

@@ -1,0 +1,5 @@
+#Models: 2
+ID 0 
+FILE ../ResourcesPacket/Models/Woman1.NFG
+ID 1 
+FILE ../ResourcesPacket/Models/Woman2.NFG

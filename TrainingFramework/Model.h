@@ -7,13 +7,17 @@ class Model {
 	Vertex* m_pVertices;
 	int* m_pIndex;
 	GLint m_Id;
-
+	char* m_Info;
 
 public:
 	unsigned int m_nIndices, m_nVertices;
 	GLuint m_vboId, m_iboId;
 
 	Model(GLuint nVertices, GLuint nIndices);
+	Model(GLint id, char* info) { 
+		m_Id = id;
+		m_Info = info; 
+	}
 	Model() {}
 
 	void Init(char* filename);

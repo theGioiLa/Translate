@@ -1,0 +1,36 @@
+#Models: 2
+ID 0 
+FILE ../ResourcesPacket/Models/Woman1.NFG
+ID 1 
+FILE ../ResourcesPacket/Models/Woman2.NFG
+
+#2D Textures: 3
+ID 0
+FILE ../ResourcesPacket/Textures/Woman1.TGA
+TILING CLAMP
+ID 1
+FILE ../ResourcesPacket/Textures/Woman2.TGA
+TILING REPEAT
+ID 2
+FILE ../ResourcesPacket/Textures/Grass.TGA
+TILING REPEAT
+
+#Cube Textures: 1
+ID 0
+FILE ../ResourcesPacket/Textures/Skybox/
+TILING CLAMP
+
+#Shaders 2
+ID 0 
+VS ../Resources/Shaders/TriangleShaderVS.vs
+FS  ../Resources/Shaders/TriangleShaderFS.fs 
+STATES 2
+STATE CULLING
+STATE DEPTH_TEST
+ID 1 
+VS  ../Resources/Shaders/CubeSkypeVS.vs 
+FS  ../Resources/Shaders/CubeSkypeFS.fs 
+STATES 2
+STATE DEPTH_TEST
+STATE ALPHA_TEST
+

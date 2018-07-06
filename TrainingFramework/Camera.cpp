@@ -1,11 +1,13 @@
 #include "stdafx.h"
 #include "Camera.h"
 
+Camera* Camera::m_Instance = nullptr;
+
 void Camera::CalculateRotation() {
 	Vector3 axisZ = (m_Position - m_Target).Normalize();
 	Vector3 axisX = (m_vUp.Cross(axisZ)).Normalize();
 	Vector3	axisY = (axisZ.Cross(axisX)).Normalize();
-	
+
 	m_RotationMatrix.m[0][0] = axisX.x;
 	m_RotationMatrix.m[0][1] = axisX.y;
 	m_RotationMatrix.m[0][2] = axisX.z;
@@ -25,7 +27,7 @@ void Camera::CalculateRotation() {
 	m_RotationMatrix.m[3][1] = 0;
 	m_RotationMatrix.m[3][2] = 0;
 	m_RotationMatrix.m[3][3] = 1;
-	
+
 }
 
 void Camera::CalculateTranslation() {
@@ -55,7 +57,7 @@ Matrix Camera::CalculateViewMatrix() {
 	T_flip.m[3][2] = -m_Position.z;
 
 	Matrix R_flip = m_RotationMatrix.Transpose();
-		
+
 	m_ViewMatrix = T_flip * R_flip;
 	return m_ViewMatrix;
 }
@@ -93,7 +95,7 @@ void Camera::MoveAlongLocalY(GLfloat deltaTime) {
 
 	m_Position += deltaMove;
 	m_Target += deltaMove;
-	
+
 	UpdateMatrix();
 }
 
@@ -101,7 +103,7 @@ void Camera::MoveAlongLocalY(GLfloat deltaTime) {
 void Camera::RotateAroundLocalX(GLfloat deltaTime) {
 	isMoved = true;
 	isRotation = true;
-	
+
 	Vector4 localTarget = Vector4(0, 0, -(m_Position - m_Target).Length(), 1);
 	Vector4 newLocalTarget = localTarget * Matrix().SetRotationX(m_AngularVelocity * deltaTime);
 	Vector4 newWorldTarget = newLocalTarget * m_WorldMatrix;
@@ -120,7 +122,7 @@ void Camera::RotateAroundLocalX(GLfloat deltaTime) {
 void Camera::RotateAroundWorldY(GLfloat deltaTime) {
 	isMoved = true;
 	isRotation = true;
-	
+
 	Vector4 localTarget = Vector4(0, 0, -(m_Position - m_Target).Length(), 1);
 	Vector4 rotationalAxis = Vector4(m_vUp, 0) * m_ViewMatrix;
 	Vector4 newLocalTarget = localTarget * Matrix().SetRotationAngleAxis(m_AngularVelocity * deltaTime, rotationalAxis.x, rotationalAxis.y, rotationalAxis.z);
@@ -140,11 +142,10 @@ void Camera::RotateAroundLocalZ(GLfloat deltaTime) {
 
 	Vector4 localUp = Vector4(m_vUp, 0) * m_ViewMatrix;
 	Vector4 newLocalUp = localUp * Matrix().SetRotationZ(m_AngularVelocity * deltaTime);
-	Vector4 newWorldUp= newLocalUp* m_WorldMatrix;
+	Vector4 newWorldUp = newLocalUp * m_WorldMatrix;
 	m_vUp.x = newWorldUp.x; m_vUp.y = newWorldUp.y; m_vUp.z = newWorldUp.z;
 
 	UpdateMatrix();
 
 	isRotation = false;
 }
-

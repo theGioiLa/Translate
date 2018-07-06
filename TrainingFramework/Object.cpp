@@ -16,7 +16,7 @@ void Object::Draw(ObjShaders& shaders) {
 	glBindTexture(GL_TEXTURE_2D, m_Skin.m_textureId);
 	glBindBuffer(GL_ARRAY_BUFFER, m_Model.m_vboId);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_Model.m_iboId);
-	
+
 	if (shaders.mvpUniform != -1) {
 		glUniform1i(shaders.mvpUniform, 1);
 		glUniformMatrix4fv(shaders.mvpUniform, 1, GL_FALSE, &m_transformMtx.m[0][0]);
@@ -42,6 +42,21 @@ void Object::Draw(ObjShaders& shaders) {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Object::SetModel(GLuint modelId) {
+
+}
+
+void SetTextures(std::vector<int> texturesID) {
+
+}
+
+void SetCubeTex(std::vector<int> cubeTexesId) {
+
+}
+
+void SetShader(GLuint shaderId) {
 }
 
 void Object::CleanUp() {

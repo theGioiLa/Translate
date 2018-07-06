@@ -12,7 +12,7 @@ class Texture {
 
 public:
 	Texture() {}
-	Texture(GLuint id, GLenum tilingMode, char* info, GLenum textureType = GL_TEXTURE_2D):
+	Texture(GLuint id, GLenum tilingMode, char* info, GLenum textureType = GL_TEXTURE_2D) :
 		m_Id(id), m_TilingMode(tilingMode), m_Info(info), m_TextureType(textureType) {}
 
 	void Init(char* fileName, GLenum textureType);

@@ -1,5 +1,6 @@
 #pragma once
-#include "GLES2\gl2.h"
+
+#include "GLES2/gl2.h"
 #include "../Utilities/utilities.h"
 #include "Vertex.h"
 
@@ -14,9 +15,9 @@ public:
 	GLuint m_vboId, m_iboId;
 
 	Model(GLuint nVertices, GLuint nIndices);
-	Model(GLint id, char* info) { 
+	Model(GLint id, char* info) {
 		m_Id = id;
-		m_Info = info; 
+		m_Info = info;
 	}
 	Model() {}
 

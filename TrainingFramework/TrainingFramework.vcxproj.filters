@@ -19,54 +19,45 @@
     <Filter Include="Resources\Shaders">
       <UniqueIdentifier>{2282dbff-09d2-4dc5-9e1d-e8b68f4514a1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources\Shaders\Texture2D">
-      <UniqueIdentifier>{c0bd9911-e5b7-4015-9aa1-a11e89b5f1da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Shaders\CubeMap">
-      <UniqueIdentifier>{875f13a9-9fbe-41be-8544-fd2bf5ff93fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Shaders">
-      <UniqueIdentifier>{9a45acc0-942d-4645-ada3-e2ca2a70740b}</UniqueIdentifier>
+      <UniqueIdentifier>{b006c0da-1b6e-467e-be03-be94c614ac6b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Shaders">
-      <UniqueIdentifier>{17dccd70-0216-497e-9cf1-6518205606f8}</UniqueIdentifier>
+    <Filter Include="Header Files\Object">
+      <UniqueIdentifier>{2fa865ad-2e7a-4460-9385-0e06ce39ec42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Shaders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TrainingFramework.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
+    <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
+    <ClCompile Include="Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
+    <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EnvShaders.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="Shaders.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjShaders.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
+    <ClCompile Include="Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,14 +80,23 @@
     <ClInclude Include="Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Shaders.h">
+      <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="EnvShaders.h">
+      <Filter>Header Files\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="ObjShaders.h">
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Header Files\Object</Filter>
+    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Header Files\Object</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>Header Files</Filter>
@@ -104,32 +104,23 @@
     <ClInclude Include="ResourceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EnvShaders.h">
-      <Filter>Header Files\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="Shaders.h">
-      <Filter>Header Files\Shaders</Filter>
-    </ClInclude>
     <ClInclude Include="Light.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Readme.doc" />
     <None Include="..\Resources\Shaders\TriangleShaderFS.fs">
-      <Filter>Resources\Shaders\Texture2D</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\TriangleShaderVS.vs">
-      <Filter>Resources\Shaders\Texture2D</Filter>
+      <Filter>Resources\Shaders</Filter>
+    </None>
+    <None Include="..\Readme.doc" />
+    <None Include="..\Resources\Shaders\CubeSkypeFS.fs">
+      <Filter>Resources\Shaders</Filter>
     </None>
     <None Include="..\Resources\Shaders\CubeSkypeVS.vs">
-      <Filter>Resources\Shaders\CubeMap</Filter>
-    </None>
-    <None Include="..\Resources\Shaders\CubeSkypeFS.fs">
-      <Filter>Resources\Shaders\CubeMap</Filter>
+      <Filter>Resources\Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -55,7 +55,7 @@ void ResourceManager::CreateModelsAndTextures() {
 
 	int nShaders;
 	fscanf(file, "\n#Shaders %d\n", &nShaders);
-	
+
 	for (int i = 0; i < nShaders; i++) {
 		char vsFile[80], fsFile[80];
 		int nState;

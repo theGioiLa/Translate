@@ -36,37 +36,37 @@ void Texture::CreateTexture2D(char* fileName) {
 void Texture::CreateTextureCubeMap(char* fileName) {
 	int width, height, bpp;
 	char rightP[80], leftP[80], topP[80], botP[80], farP[80], nearP[80];
-	strcpy(rightP, fileName);
-	strcat(rightP, "right.TGA");
+	strcpy_s(rightP, fileName);
+	strcat_s(rightP, "right.TGA");
 
-	strcpy(leftP, fileName);
-	strcat(leftP, "left.TGA");
+	strcpy_s(leftP, fileName);
+	strcat_s(leftP, "left.TGA");
 
-	strcpy(topP, fileName);
-	strcat(topP, "top.TGA");
-	
-	strcpy(botP, fileName);
-	strcat(botP, "bottom.TGA");
+	strcpy_s(topP, fileName);
+	strcat_s(topP, "top.TGA");
 
-	strcpy(farP, fileName);
-	strcat(farP, "back.TGA");
+	strcpy_s(botP, fileName);
+	strcat_s(botP, "bottom.TGA");
 
-	strcpy(nearP, fileName);
-	strcat(nearP, "front.TGA");
+	strcpy_s(farP, fileName);
+	strcat_s(farP, "back.TGA");
+
+	strcpy_s(nearP, fileName);
+	strcat_s(nearP, "front.TGA");
 
 	glActiveTexture(GL_TEXTURE0);
 	glEnable(GL_TEXTURE_CUBE_MAP);
 	glGenTextures(1, &m_textureId);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_textureId);
 
-	char **cubePixels= new char*[6];
+	char **cubePixels = new char*[6];
 	cubePixels[0] = LoadTGA(rightP, &width, &height, &bpp);
 	cubePixels[1] = LoadTGA(leftP, &width, &height, &bpp);
 	cubePixels[2] = LoadTGA(topP, &width, &height, &bpp);
 	cubePixels[3] = LoadTGA(botP, &width, &height, &bpp);
 	cubePixels[4] = LoadTGA(farP, &width, &height, &bpp);
 	cubePixels[5] = LoadTGA(nearP, &width, &height, &bpp);
-	
+
 	for (int i = 0; i < 6; i++) {
 		if (bpp == 24) {
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, cubePixels[i]);
@@ -86,7 +86,8 @@ void Texture::CreateTextureCubeMap(char* fileName) {
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 	glDisable(GL_TEXTURE_CUBE_MAP);
 }
-

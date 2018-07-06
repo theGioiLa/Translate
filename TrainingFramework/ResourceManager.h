@@ -1,10 +1,10 @@
 #pragma once 
 
-#include <vector>
 #include "Model.h"
 #include "Texture.h"
 #include "Map.h"
 #include "EnvShaders.h"
+#include <vector>
 
 class ResourceManager {
 	ResourceManager() {}

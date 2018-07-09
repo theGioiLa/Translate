@@ -11,11 +11,9 @@ class Model {
 public:
 	unsigned int m_nIndices, m_nVertices;
 	GLuint m_vboId, m_iboId;
-	GLint positionAttribute;
-	GLint mvpUniform;
 	char* m_Info;
 
-	Model(GLint id): m_pVertices(nullptr), m_pIndex(nullptr) { 
+	Model(GLint id) : m_pVertices(nullptr), m_pIndex(nullptr) {
 		m_Id = id;
 		m_Info = new char[80];
 	}
@@ -23,7 +21,7 @@ public:
 	Model() {}
 	~Model();
 
-	int Init(GLint program);
+	int Init();
 	void BindData();
 	int BindInfo();
 	void CleanUp();

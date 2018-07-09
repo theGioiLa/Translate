@@ -20,9 +20,6 @@ protected:
 
 	Matrix					m_TransformMtx;
 
-	GLint					texcoordAttribute;
-	GLint					texcoordUniform;
-
 	void DrawObj();
 	void DrawEnv();
 

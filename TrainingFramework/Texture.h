@@ -11,13 +11,13 @@ class Texture {
 	void CreateTextureCubeMap();
 
 public:
-	GLuint		m_textureId;
+	GLuint		m_TextureId, m_TexUnit;
 	char*		m_Info;
 
 	Texture() {}
 
 	Texture(int id, GLenum textureType = GL_TEXTURE_2D, bool active = true) :
-		m_Id(id), m_TextureType(textureType), isActive(active) {
+		m_Id(id), m_TexUnit(id), m_TextureType(textureType), isActive(active) {
 		m_Info = new char[80];
 	}
 	~Texture();

@@ -14,7 +14,7 @@ int ResourceManager::InitShaders() {
 	for (; it != m_LShaders.end(); it++) {
 		if ((*it)->Init()) return -1;
 	}
-	
+
 	return 0;
 }
 
@@ -72,7 +72,7 @@ int ResourceManager::CreateModelsAndTextures() {
 
 	int nShaders;
 	fscanf(file, "\n#Shaders %d\n", &nShaders);
-	
+
 	for (int i = 0; i < nShaders; i++) {
 		Shaders* shader = new Shaders(i);
 		int nState;
@@ -111,7 +111,7 @@ void ResourceManager::CleanUp() {
 	}
 
 	std::vector<Texture*>::iterator itCubeTex = m_LCubeTexs.begin();
-	for (; itCubeTex!= m_LCubeTexs.end(); itCubeTex++) {
+	for (; itCubeTex != m_LCubeTexs.end(); itCubeTex++) {
 		(*itCubeTex)->CleanUp();
 		delete (*itCubeTex);
 	}

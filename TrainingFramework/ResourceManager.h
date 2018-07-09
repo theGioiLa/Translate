@@ -22,7 +22,7 @@ public:
 		if (m_Instance == nullptr) m_Instance = new ResourceManager;
 		return m_Instance;
 	}
-	
+
 	int Init(char* dataSource);
 	Model* GetModel(GLuint id) { return m_LModels.at(id); }
 	Texture* GetTexture(GLuint id) { return m_LTextures.at(id); }

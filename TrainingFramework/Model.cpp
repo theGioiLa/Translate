@@ -1,10 +1,7 @@
 #include "stdafx.h"
 #include "Model.h"
 
-int Model::Init(GLint program) {
-	positionAttribute = glGetAttribLocation(program, "a_pos");
-	mvpUniform = glGetUniformLocation(program, "mvp_matrix");
-	 
+int Model::Init() {
 	return BindInfo();
 }
 
@@ -28,7 +25,7 @@ int Model::BindInfo() {
 
 	m_pVertices = new Vertex[m_nVertices];
 	for (int i = 0; i < m_nVertices; i++) {
-		fscanf_s(file, "%*d. pos:[%f, %f, %f]; norm:[%*f, %*f, %*f]; binorm:[%*f, %*f, %*f]; tgt:[%*f, %*f, %*f]; uv:[%f, %f];\n", 
+		fscanf_s(file, "%*d. pos:[%f, %f, %f]; norm:[%*f, %*f, %*f]; binorm:[%*f, %*f, %*f]; tgt:[%*f, %*f, %*f]; uv:[%f, %f];\n",
 			&m_pVertices[i].pos.x, &m_pVertices[i].pos.y, &m_pVertices[i].pos.z, &m_pVertices[i].texcoord.x, &m_pVertices[i].texcoord.y);
 	}
 
@@ -52,9 +49,5 @@ void Model::CleanUp() {
 }
 
 Model::~Model() {
-	
+
 }
-
-
-
-

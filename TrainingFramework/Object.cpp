@@ -6,20 +6,19 @@ int Object::Init() {
 	glEnable(m_pShader->states);
 
 	if (m_LCubTexes.size() == 0) {
-		texcoordAttribute = glGetAttribLocation(program, "a_uv");
-		texcoordUniform = glGetUniformLocation(program, "u_texture");
-
 		std::vector<Texture*>::iterator itTex2D = m_LTextures.begin();
 		for (; itTex2D != m_LTextures.end(); itTex2D++) {
 			if ((*itTex2D)->isOn()) {
 				(*itTex2D)->Init();
+				(*itTex2D)->m_TexUnit++;
 			}
 		}
 
-	} else {
+	}
+	else {
 		std::vector<Texture*>::iterator itTex2D = m_LTextures.begin();
 		for (; itTex2D != m_LTextures.end(); itTex2D++) (*itTex2D)->SetActicve(false);
-		
+
 		std::vector<Texture*>::iterator itCubTex = m_LCubTexes.begin();
 		for (; itCubTex != m_LCubTexes.end(); itCubTex++) {
 			if ((*itCubTex)->isOn()) {
@@ -28,7 +27,7 @@ int Object::Init() {
 		}
 	}
 
-	if (m_pModel->Init(program) != 0) return -1;
+	if (m_pModel->Init() != 0) return -1;
 	m_pModel->BindData();
 	return 0;
 }
@@ -41,60 +40,96 @@ void Object::Draw() {
 
 void Object::DrawObj() {
 	std::vector<Texture*>::iterator itTex2D = m_LTextures.begin();
-	for (; itTex2D != m_LTextures.end(); itTex2D++) {
-		if ((*itTex2D)->isOn()) {
-			glBindBuffer(GL_TEXTURE_2D, (*itTex2D)->m_textureId);
-			glBindBuffer(GL_ARRAY_BUFFER, m_pModel->m_vboId);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_pModel->m_iboId);
-
-			if (m_pModel->mvpUniform != -1) {
-				glUniform1i(m_pModel->mvpUniform, 1);
-				glUniformMatrix4fv(m_pModel->mvpUniform, 1, GL_FALSE, &m_TransformMtx.m[0][0]);
-			}
-
-			if (m_pModel->positionAttribute != -1) {
-				glEnableVertexAttribArray(m_pModel->positionAttribute);
-				glVertexAttribPointer(m_pModel->positionAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-			}
-
-			if (texcoordAttribute != -1) {
-				glUniform1i(texcoordAttribute, 0);
-				glEnableVertexAttribArray(texcoordAttribute);
-				glVertexAttribPointer(texcoordAttribute, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(Vector3));
-			}
-
-			glDrawElements(GL_TRIANGLES, m_pModel->m_nIndices, GL_UNSIGNED_INT, 0);
-			glDisableVertexAttribArray(m_pModel->positionAttribute);
-			glDisableVertexAttribArray(texcoordAttribute);
-
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glBindTexture(GL_TEXTURE_2D, 0);
+	for (auto& tex : m_LTextures) {
+		glActiveTexture(GL_TEXTURE0 + tex->m_TexUnit);
+		glBindTexture(GL_TEXTURE_2D, tex->m_TextureId);
+		if (m_pShader->sampler2DLoc != -1) {
+					glUniform1i(m_pShader->sampler2DLoc, tex->m_TexUnit);
 		}
 	}
+	/*for (int i = 0; i < m_LTextures.size(); i++) {
+			glActiveTexture(GL_TEXTURE0 + i);
+			glBindTexture(GL_TEXTURE_2D, m_LTextures[i]->m_TextureId);
+			
+	}*/
 
+	/*for (; itTex2D != m_LTextures.end(); itTex2D++) {
+		if ((*itTex2D)->isOn()) {
+			glActiveTexture(GL_TEXTURE0 + (*itTex2D)->m_TexUnit);
+			glBindTexture(GL_TEXTURE_2D, (*itTex2D)->m_TextureId);
+			if (m_pShader->sampler2DLoc != -1) {
+				glUniform1i(m_pShader->sampler2DLoc, (*itTex2D)->m_TexUnit);
+			}
+		}
+	}*/
+
+	glBindBuffer(GL_ARRAY_BUFFER, m_pModel->m_vboId);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_pModel->m_iboId);
+
+	int slot = 0;
+
+	if (m_pShader->baseTexLoc != -1) {
+		glUniform1i(m_pShader->baseTexLoc, slot++);
+	}
+
+	if (m_pShader->tex1Loc != -1) {
+		glUniform1i(m_pShader->tex1Loc, slot++);
+	}
+
+	if (m_pShader->tex2Loc != -1) {
+		glUniform1i(m_pShader->tex2Loc, slot++);
+	}
+
+	if (m_pShader->tex3Loc != -1) {
+		glUniform1i(m_pShader->tex3Loc, slot);
+	}
+
+	if (m_pShader->mvpUniform != -1) {
+		glUniformMatrix4fv(m_pShader->mvpUniform, 1, GL_FALSE, &m_TransformMtx.m[0][0]);
+	}
+
+	if (m_pShader->positionAttribute != -1) {
+		glEnableVertexAttribArray(m_pShader->positionAttribute);
+		glVertexAttribPointer(m_pShader->positionAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+	}
+
+	if (m_pShader->texcoordAttribute != -1) {
+		glEnableVertexAttribArray(m_pShader->texcoordAttribute);
+		glVertexAttribPointer(m_pShader->texcoordAttribute, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(Vector3));
+	}
+
+	glDrawElements(GL_TRIANGLES, m_pModel->m_nIndices, GL_UNSIGNED_INT, 0);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Object::DrawEnv() {
 	std::vector<Texture*>::iterator itCubeTex = m_LCubTexes.begin();
 	for (; itCubeTex != m_LCubTexes.end(); itCubeTex++) {
 		if ((*itCubeTex)->isOn()) {
-			glBindTexture(GL_TEXTURE_CUBE_MAP, (*itCubeTex)->m_textureId);
+			glActiveTexture(GL_TEXTURE0 + (*itCubeTex)->m_TexUnit);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, (*itCubeTex)->m_TextureId);
 			glBindBuffer(GL_ARRAY_BUFFER, m_pModel->m_vboId);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_pModel->m_iboId);
 
-			if (m_pModel->mvpUniform != -1) {
-				glUniform1i(m_pModel->mvpUniform, 1);
-				glUniformMatrix4fv(m_pModel->mvpUniform, 1, GL_FALSE, &m_TransformMtx.m[0][0]);
+			if (m_pShader->samplerCubeLoc != -1) {
+				glUniform1i(m_pShader->samplerCubeLoc, (*itCubeTex)->m_TexUnit);
 			}
 
-			if (m_pModel->positionAttribute != -1) {
-				glEnableVertexAttribArray(m_pModel->positionAttribute);
-				glVertexAttribPointer(m_pModel->positionAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+			if (m_pShader->mvpUniform != -1) {
+				glUniform1i(m_pShader->mvpUniform, 1);
+				glUniformMatrix4fv(m_pShader->mvpUniform, 1, GL_FALSE, &m_TransformMtx.m[0][0]);
+			}
+
+			if (m_pShader->positionAttribute != -1) {
+				glEnableVertexAttribArray(m_pShader->positionAttribute);
+				glVertexAttribPointer(m_pShader->positionAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 			}
 
 			glDrawElements(GL_TRIANGLES, m_pModel->m_nIndices, GL_UNSIGNED_INT, 0);
-			glDisableVertexAttribArray(m_pModel->positionAttribute);
+			glDisableVertexAttribArray(m_pShader->positionAttribute);
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);

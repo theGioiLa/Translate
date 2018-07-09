@@ -10,9 +10,9 @@ int Shaders::Init(char * fileVertexShader, char * fileFragmentShader)
 
 	fragmentShader = esLoadShader(GL_FRAGMENT_SHADER, fileFragmentShader);
 
-	if ( fragmentShader == 0 )
+	if (fragmentShader == 0)
 	{
-		glDeleteShader( vertexShader );
+		glDeleteShader(vertexShader);
 		return -2;
 	}
 
@@ -29,15 +29,30 @@ int Shaders::Init() {
 
 	fragmentShader = esLoadShader(GL_FRAGMENT_SHADER, fileFS);
 
-	if ( fragmentShader == 0 )
+	if (fragmentShader == 0)
 	{
-		glDeleteShader( vertexShader );
+		glDeleteShader(vertexShader);
 		return -2;
 	}
 
 	program = esLoadProgram(vertexShader, fragmentShader);
+	FindUniformsAndAttributesLoc(); 
 
 	return 0;
+}
+
+void Shaders::FindUniformsAndAttributesLoc() {
+	positionAttribute = glGetAttribLocation(program, "a_pos");
+	texcoordAttribute = glGetAttribLocation(program, "a_uv");
+
+	mvpUniform = glGetUniformLocation(program, "mvp_matrix");
+	sampler2DLoc = glGetUniformLocation(program, "u_texture");
+	samplerCubeLoc = glGetUniformLocation(program, "u_samplerCube");
+
+	baseTexLoc = glGetUniformLocation(program, "baseTex");
+	tex1Loc = glGetUniformLocation(program, "texture1");
+	tex2Loc = glGetUniformLocation(program, "texture2");
+	tex3Loc = glGetUniformLocation(program, "texture3");
 }
 
 Shaders::~Shaders()

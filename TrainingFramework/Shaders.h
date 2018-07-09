@@ -2,7 +2,7 @@
 #include "../Utilities/utilities.h"
 #include <vector>
 
-class Shaders
+class Shaders 
 {
 public:
 	GLuint program, vertexShader, fragmentShader;
@@ -13,11 +13,19 @@ public:
 
 	int Init(char * fileVertexShader, char * fileFragmentShader);
 	int Init();
-	virtual void FindLocationUA() {};
 
 	Shaders() {}
-	Shaders(GLuint id, char* _fileVS, char* _fileFS, GLenum enable_States) :
-		m_Id(id), fileVS(_fileVS), fileFS(_fileFS), states(enable_States) {}
+	Shaders(GLuint id,  GLenum enable_States = 0): 
+		m_Id(id), states(enable_States) {
+		fileVS = new char[50];
+		fileFS = new char[50];
+	}
+
+	void CleanUp();
+	
+	void SetEnableState(GLenum enale_States) {
+		states = enale_States;
+	}
 
 	~Shaders();
 };

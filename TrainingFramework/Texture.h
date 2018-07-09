@@ -2,24 +2,32 @@
 #include "../Utilities/utilities.h"
 
 class Texture {
-	GLuint m_Id;
-	GLenum m_TilingMode;
-	char* m_Info;
-	GLenum m_TextureType;
+	GLuint		m_Id;
+	GLenum		m_TilingMode;
+	GLenum		m_TextureType;
+	bool		isActive;
 
-	void CreateTexture2D(char* fileName);
-	void CreateTextureCubeMap(char* fileName);
+	void CreateTexture2D();
+	void CreateTextureCubeMap();
 
 public:
+	GLuint		m_textureId;
+	char*		m_Info;
+
 	Texture() {}
-	Texture(GLuint id, GLenum tilingMode, char* info, GLenum textureType = GL_TEXTURE_2D) :
-		m_Id(id), m_TilingMode(tilingMode), m_Info(info), m_TextureType(textureType) {}
 
-	void Init(char* fileName, GLenum textureType);
-	void Draw();
-	void CleanUp() {
-		glDeleteTextures(1, &m_textureId);
+	Texture(int id, GLenum textureType = GL_TEXTURE_2D, bool active = true) :
+		m_Id(id), m_TextureType(textureType), isActive(active) {
+		m_Info = new char[80];
 	}
+	~Texture();
 
-	GLuint m_textureId;
+	void Init();
+	void Draw();
+	void CleanUp();
+
+	void SetTilingMode(GLenum tilingMode) { m_TilingMode = tilingMode; }
+	void SetId(GLuint id) { m_Id = id; }
+	void SetActicve(bool status) { isActive = status; }
+	bool isOn() { return isActive; }
 };

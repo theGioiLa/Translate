@@ -11,24 +11,18 @@ protected:
 
 	Vector3 m_vUp;
 	GLboolean isMoved, isRotation;
-	static Camera* m_Instance;
 
 	void CalculateRotation();
 	void CalculateTranslation();
-	void UpdateMatrix();
 
 public:
-	Camera() : m_ViewMatrix(Matrix().SetIdentity()), m_Position(Vector3(0.0f, 0.0f, 0.0f)),
+	Camera() : m_Position(Vector3(0.0f, 0.0f, 0.0f)),
 		m_Target(Vector3(0.0f, 0.0f, -1.0f)), m_vUp(Vector3(0.0f, 1.0f, 0.0f)), isMoved(false),
 		isRotation(false) {
 		CalculateRotation();
 		CalculateTranslation();
-		CalculateWorldMatrix();
-	}
-
-	static Camera* GetInstance() {
-		if (m_Instance == nullptr) m_Instance = new Camera;
-		return m_Instance;
+		UpdateWorldMatrix();
+		UpdateViewMatrix();
 	}
 
 	void MoveAlongLocalX(GLfloat deltaTime);
@@ -39,10 +33,11 @@ public:
 	void RotateAroundWorldY(GLfloat deltaTime);
 	void RotateAroundLocalZ(GLfloat deltaTime);
 
-	Matrix CalculateWorldMatrix();
-	Matrix CalculateViewMatrix();
+	Matrix UpdateWorldMatrix();
+	Matrix UpdateViewMatrix();
 
 	Matrix GetViewMatrix() { return m_ViewMatrix; }
+	Matrix GetProjectionMatrix() { return m_ProjectionMatrix; }
 
 	void SetProjectionMatrix(float fov, float nearP, float farP) {
 		m_ProjectionMatrix = Matrix().SetPerspective(fov, static_cast<float>(Globals::screenWidth) / Globals::screenHeight, nearP, farP);
@@ -52,5 +47,7 @@ public:
 		m_Velocity = speed;
 		m_AngularVelocity = speed;
 	}
+
+	~Camera() {}
 
 };

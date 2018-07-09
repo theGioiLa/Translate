@@ -3,8 +3,6 @@
 #include "Model.h"
 #include "Texture.h"
 #include "ResourceManager.h"
-#include "ObjShaders.h"
-#include "EnvShaders.h"
 #include <vector>
 
 class Object {
@@ -12,34 +10,36 @@ protected:
 	GLuint					m_Id;
 	Model*					m_pModel;
 	std::vector<Texture*>	m_LTextures;
+	std::vector<Texture*>	m_LCubTexes;
 	Shaders*				m_pShader;
-
-	Model m_Model;
-	Texture m_Skin;
+	ResourceManager*		resourceManager;
 
 	Vector3					m_Scale;
 	Vector3					m_RotationalAngle;
 	Vector3					m_Position;
 
-	Matrix					m_transformMtx;
+	Matrix					m_TransformMtx;
+
+	GLint					texcoordAttribute;
+	GLint					texcoordUniform;
+
+	void DrawObj();
+	void DrawEnv();
 
 public:
 	Object(GLuint id) : m_Id(id), m_Scale(Vector3(1, 1, 1)), m_RotationalAngle(Vector3(0, 0, 0)),
 		m_Position(Vector3(0, 0, 0)) {
-		m_Model = Model();
-		m_Skin = Texture();
+		resourceManager = ResourceManager::GetInstance();
 	}
 
 	Object() : m_Scale(Vector3(1, 1, 1)), m_RotationalAngle(Vector3(0, 0, 0)),
 		m_Position(Vector3(0, 0, 0)) {
-		m_Model = Model();
-		m_Skin = Texture();
+		resourceManager = ResourceManager::GetInstance();
 	}
 
-	virtual void Init(char* fileTGA, char* fileNFG, GLenum textureType = GL_TEXTURE_2D);
-	virtual void Draw(ObjShaders& shaders);
+	int Init();
 
-	void CleanUp();
+	void Draw();
 
 	void SetModel(GLuint modelId);
 	void SetTextures(std::vector<int> texturesID);
@@ -49,10 +49,15 @@ public:
 	void SetScale(Vector3 vScale) { m_Scale = vScale; }
 
 	void SetRotationAngle(Vector3 vRotation) {
-		m_RotationalAngle = vRotation;
+		m_RotationalAngle = ToRadian(vRotation);
+	}
+
+	Vector3 ToRadian(Vector3 angle) {
+		angle *= (3.14 / 180);
+		return angle;
 	}
 
 	void SetTranslation(Vector3 position) { m_Position = position; }
 
-	void CalculateTransformMatrix();
+	void UpdateTransformMatrix(Matrix viewMatrix, Matrix projectionMatrix);
 };

@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "Camera.h"
 
-Camera* Camera::m_Instance = nullptr;
-
 void Camera::CalculateRotation() {
 	Vector3 axisZ = (m_Position - m_Target).Normalize();
 	Vector3 axisX = (m_vUp.Cross(axisZ)).Normalize();
@@ -34,7 +32,7 @@ void Camera::CalculateTranslation() {
 	m_TranslationMatrix.SetTranslation(m_Position);
 }
 
-Matrix Camera::CalculateWorldMatrix() {
+Matrix Camera::UpdateWorldMatrix() {
 	if (isMoved) {
 		if (!isRotation) CalculateTranslation();
 		CalculateRotation();
@@ -45,7 +43,7 @@ Matrix Camera::CalculateWorldMatrix() {
 	return m_WorldMatrix;
 }
 
-Matrix Camera::CalculateViewMatrix() {
+Matrix Camera::UpdateViewMatrix() {
 	if (isMoved) {
 		if (!isRotation) CalculateTranslation();
 		CalculateRotation();
@@ -62,10 +60,6 @@ Matrix Camera::CalculateViewMatrix() {
 	return m_ViewMatrix;
 }
 
-void Camera::UpdateMatrix() {
-	CalculateWorldMatrix();
-	CalculateViewMatrix();
-}
 void Camera::MoveAlongLocalZ(GLfloat deltaTime) {
 	isMoved = true;
 	Vector3 direction = (m_Position - m_Target).Normalize();
@@ -74,7 +68,8 @@ void Camera::MoveAlongLocalZ(GLfloat deltaTime) {
 	m_Position += deltaMove;
 	m_Target += deltaMove;
 
-	UpdateMatrix();
+	UpdateWorldMatrix();
+	UpdateViewMatrix();
 }
 
 void Camera::MoveAlongLocalX(GLfloat deltaTime) {
@@ -85,7 +80,8 @@ void Camera::MoveAlongLocalX(GLfloat deltaTime) {
 	m_Position += deltaMove;
 	m_Target += deltaMove;
 
-	UpdateMatrix();
+	UpdateWorldMatrix();
+	UpdateViewMatrix();
 }
 
 void Camera::MoveAlongLocalY(GLfloat deltaTime) {
@@ -96,10 +92,11 @@ void Camera::MoveAlongLocalY(GLfloat deltaTime) {
 	m_Position += deltaMove;
 	m_Target += deltaMove;
 
-	UpdateMatrix();
+	UpdateWorldMatrix();
+	UpdateViewMatrix();
 }
 
-//Avoid this camera rotates over pi/2 
+//Rotate camera around local X 360 degree
 void Camera::RotateAroundLocalX(GLfloat deltaTime) {
 	isMoved = true;
 	isRotation = true;
@@ -114,7 +111,8 @@ void Camera::RotateAroundLocalX(GLfloat deltaTime) {
 	Vector4 newWorldUp = newLocalUp * m_WorldMatrix;
 	m_vUp.x = newWorldUp.x; m_vUp.y = newWorldUp.y; m_vUp.z = newWorldUp.z;
 
-	UpdateMatrix();
+	UpdateWorldMatrix();
+	UpdateViewMatrix();
 
 	isRotation = false;
 }
@@ -132,7 +130,8 @@ void Camera::RotateAroundWorldY(GLfloat deltaTime) {
 	m_Target.y = newWorldTarget.y;
 	m_Target.z = newWorldTarget.z;
 
-	UpdateMatrix();
+	UpdateWorldMatrix();
+	UpdateViewMatrix();
 	isRotation = false;
 }
 
@@ -145,7 +144,7 @@ void Camera::RotateAroundLocalZ(GLfloat deltaTime) {
 	Vector4 newWorldUp = newLocalUp * m_WorldMatrix;
 	m_vUp.x = newWorldUp.x; m_vUp.y = newWorldUp.y; m_vUp.z = newWorldUp.z;
 
-	UpdateMatrix();
-
+	UpdateWorldMatrix();
+	UpdateViewMatrix();
 	isRotation = false;
 }

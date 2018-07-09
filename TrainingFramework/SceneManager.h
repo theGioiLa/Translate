@@ -2,7 +2,6 @@
 #include "Object.h"
 #include "Camera.h"
 #include "Light.h"
-#include <vector>
 
 class SceneManager {
 	SceneManager() {};
@@ -10,18 +9,23 @@ class SceneManager {
 
 	char*				 m_SourceData;
 	std::vector<Object*> m_LObjs;
-	Camera*				 camera = nullptr;
+	Camera				 camera;
 
+	int CreateObjectsAndCamera();
 public:
 	static SceneManager* GetInstance() {
 		if (m_Instance == nullptr) m_Instance = new SceneManager;
 		return m_Instance;
 	}
 
-	void Init(char* dataSource);
-	void CreateObjects();
+	int Init(char* dataSource);
+	int LoadObjects();
 	void LoadObject(GLuint objId);
-	void SetCamera(float nearP, float farP, float fov, float speed);
-	void Update();
+	void SetCamera(float fov, float nearP, float farP, float speed);
+	void Update(unsigned char key, float deltaTime);
+	void UpdateCamera(unsigned char key, float deltaTime);
 	void Draw();
+	void CleanUp();
+
+	~SceneManager() {}
 };

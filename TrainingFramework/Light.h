@@ -1,8 +1,6 @@
 #pragma once
-class Light
-{
-public:
+ 
+class Light {
 	Light();
 	~Light();
 };
-
